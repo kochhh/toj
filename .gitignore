@@ -1,0 +1,23 @@
+# Images sources
+i/_src
+i/**/_src
+
+# Logs
+/logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+
+# macOS
+.DS_Store
