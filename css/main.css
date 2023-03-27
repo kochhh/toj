@@ -363,7 +363,8 @@ progress {
 
 
 :not(.btn-check) + .btn:active,
-.btn:first-child:active {
+.btn:first-child:active,
+.btn.show {
   color: var(--bs-btn-active-color);
   background-color: var(--bs-btn-active-bg);
   border-color: var(--bs-btn-active-border-color);
@@ -371,7 +372,8 @@ progress {
 
 
 :not(.btn-check) + .btn:active:focus-visible,
-.btn:first-child:active:focus-visible {
+.btn:first-child:active:focus-visible,
+.btn.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
 
@@ -476,6 +478,10 @@ progress {
   transform: scale(0.95);
 }
 
+.modal.show .modal-dialog {
+  transform: none;
+}
+
 .modal-dialog-centered {
   display: flex;
   align-items: center;
@@ -494,6 +500,14 @@ progress {
   border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
   border-radius: var(--bs-modal-border-radius);
   outline: 0;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.show {
+  opacity: var(--bs-backdrop-opacity);
 }
 
 .modal-body {
