@@ -1,6 +1,69 @@
 (function() {
     'use strict';
 
+    class CountdownTimer {
+        constructor(_ref) {
+            let {
+                selector,
+                targetDate
+            } = _ref;
+            this.selector = selector;
+            this.targetDate = targetDate;
+            this.refs = {
+                days: document.querySelector(`${this.selector} [data-value="days"]`),
+                hours: document.querySelector(`${this.selector} [data-value="hours"]`),
+                mins: document.querySelector(`${this.selector} [data-value="minutes"]`),
+                secs: document.querySelector(`${this.selector} [data-value="seconds"]`)
+            };
+            this.intervalId = null;
+        }
+        getTimeRemaining(endtime) {
+            const total = Date.parse(endtime) - Date.parse(new Date());
+            const days = total > 0 ? Math.floor(total / (1000 * 60 * 60 * 24)) : 0;
+            const hours = total > 0 ? Math.floor(total / (1000 * 60 * 60) % 24) : 0;
+            const mins = total > 0 ? Math.floor(total / 1000 / 60 % 60) : 0;
+            const secs = total > 0 ? Math.floor(total / 1000 % 60) : 0;
+            if (total <= 0) this.stopTimer();
+            return {
+                total,
+                days,
+                hours,
+                mins,
+                secs
+            };
+        }
+        getDaysEnding(number) {
+            const lastNum = number % 10;
+            if (number > 10 && [11, 12, 13, 14].includes(number % 100)) return 'дней';
+            if (lastNum === 1) return 'день';
+            if ([2, 3, 4].includes(lastNum)) return 'дня';
+            if ([5, 6, 7, 8, 9, 0].includes(lastNum)) return 'дней';
+        }
+        updateTimer(_ref2) {
+            let {
+                days,
+                hours,
+                mins,
+                secs
+            } = _ref2;
+            this.refs.days.textContent = days > 0 ? days + ' ' + this.getDaysEnding(days) : '';
+            this.refs.hours.textContent = hours < 10 ? '0' + hours : hours;
+            this.refs.mins.textContent = mins < 10 ? '0' + mins : mins;
+            this.refs.secs.textContent = secs < 10 ? '0' + secs : secs;
+        }
+        startTimer() {
+            const timer = this.getTimeRemaining(this.targetDate);
+            this.updateTimer(timer);
+            this.intervalId = setInterval(() => {
+                const timer = this.getTimeRemaining(this.targetDate);
+                this.updateTimer(timer);
+            }, 1000);
+        }
+        stopTimer() {
+            clearInterval(this.intervalId);
+        }
+    }
+
     /* eslint-disable no-undef */
     const Common = {
         init() {
@@ -31,6 +94,24 @@
                 const parallax = document.querySelector('.parallax');
                 if (!parallax) return;
                 new Parallax(parallax);
+            })();
+
+            // Countdown modal example
+            (function() {
+                const modalEl = document.getElementById('modalCountdown');
+                if (!modalEl) return;
+                const modal = new bootstrap.Modal(modalEl);
+                const timer = new CountdownTimer({
+                    selector: '#countdown',
+                    targetDate: new Date('March, 30 2023 12:00:00')
+                });
+                setTimeout(() => {
+                    modal.show();
+                    timer.startTimer();
+                }, 10000);
+                modalEl.addEventListener('hidden.bs.modal', () => {
+                    timer.stopTimer();
+                });
             })();
         }
     };
